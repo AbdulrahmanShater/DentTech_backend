@@ -21,25 +21,32 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, length = 60, nullable = false)
+    @Column(length = 60, nullable = false)
     private String invoiceNumber;
 
-    @Column(unique = true, length = 60 )
+    @Column( length = 60 )
     private String patientName;
-    @Column(unique = true, length = 60)
+    @Column( length = 60)
     private String fileNumber;
-    @Column(unique = true, length = 60)
+    @Column( length = 60)
     private String jobOrder;
-    @Column(unique = true, length = 60)
+    @Column( length = 60)
     private String Shade;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private boolean paid;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private boolean sell;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    @OneToMany
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @JoinColumn(name = "invoice_id")
+    private List<Payment> payments;
+
+
     @OneToMany
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JoinColumn(name = "invoice_id")

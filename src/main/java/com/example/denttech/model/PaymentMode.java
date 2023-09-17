@@ -18,6 +18,6 @@ public class PaymentMode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String name;
 }

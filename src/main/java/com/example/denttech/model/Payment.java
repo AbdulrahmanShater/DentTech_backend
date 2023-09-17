@@ -19,18 +19,18 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private double amount;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private LocalDate paymentDate;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String paymentNumber;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String reference;
 
     @ManyToOne
-    @JoinColumn(name = "comapny_id")
-    private Company company;
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
     @ManyToOne
     @JoinColumn(name = "payment_mode_id")
     private PaymentMode paymentMode;

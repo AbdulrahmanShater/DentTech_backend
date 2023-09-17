@@ -20,10 +20,18 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String name;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String description;
+    @Column( length = 60, nullable = false)
+    private double price1;
+    @Column( length = 60, nullable = false)
+    private double price2;
+    @Column( length = 60, nullable = false)
+    private double price3;
+    @Column( length = 60, nullable = false)
+    private double price4;
 
     @OneToMany
     @Cascade(org.hibernate.annotations.CascadeType.ALL)

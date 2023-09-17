@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,17 +21,24 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String firstName;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String lastName;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String email;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String password;
 
     @ManyToOne
-    @JoinColumn(name = "lab_id")
-    private Laboratory laboratory;
+    @JoinColumn(name = "company_id")
+    private Company company;
+    @OneToMany
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @JoinColumn(name = "account_id")
+    private List<Invoice> Invoices;
 
+    @ManyToOne
+    @JoinColumn(name = "user_role_id")
+    private UserRole userRole;
 }

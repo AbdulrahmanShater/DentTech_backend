@@ -20,21 +20,34 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String name;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String tel;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String poBox;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String email;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String TRN;
-    @Column(unique = true, length = 60, nullable = false)
+    @Column( length = 60, nullable = false)
     private String address;
+    @Column( length = 60)
+    private boolean vendor;
+    @Column( length = 60)
+    private Long price_stage;
 
     @OneToMany
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JoinColumn(name = "company_id")
-    private List<Customer> customers;
+    private List<Account> accounts;
+
+    @ManyToOne
+    @JoinColumn(name = "parentTypeCode")
+    protected Company parent;
+
+    @OneToMany(mappedBy = "parent")
+    protected List<Company> children;
+
+
 }

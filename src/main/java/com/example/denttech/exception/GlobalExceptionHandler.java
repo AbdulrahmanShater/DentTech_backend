@@ -1,6 +1,6 @@
 package com.example.denttech.exception;
 
-import com.example.springboottest.dto.ErrorResponse;
+import com.example.denttech.dto.ErrorResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
