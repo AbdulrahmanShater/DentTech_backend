@@ -7,22 +7,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRole {
+public class InvoicePayment {
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column( length = 60, nullable = false)
-    private String name;
+    Long id;
 
-    @OneToMany
-    @JoinColumn(name = "user_role_id")
-    private List<User> users;
+    @ManyToOne
+    @JoinColumn(name = "payment_id")
+    Payment payment;
+
+    @ManyToOne
+    @JoinColumn(name = "invoice_id")
+    Invoice invoice;
+
+    LocalDateTime paidAt;
+
+    int grade;
 }

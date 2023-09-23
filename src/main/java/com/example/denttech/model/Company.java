@@ -40,7 +40,7 @@ public class Company {
     @OneToMany
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JoinColumn(name = "company_id")
-    private List<Account> accounts;
+    private List<User> users;
 
     @ManyToOne
     @JoinColumn(name = "parentTypeCode")

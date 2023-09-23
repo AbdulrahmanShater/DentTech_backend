@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -28,9 +30,8 @@ public class Payment {
     @Column( length = 60, nullable = false)
     private String reference;
 
-    @ManyToOne
-    @JoinColumn(name = "invoice_id")
-    private Invoice invoice;
+    @OneToMany(mappedBy = "payment")
+    List<InvoicePayment> invoicePayments;
     @ManyToOne
     @JoinColumn(name = "payment_mode_id")
     private PaymentMode paymentMode;

@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/DentTech
+    username: postgres
+    password: 123
+    driver-class-name: org.postgresql.Driver
+    dbcp2:
+      test-while-idle: true
+      validation-query: select 1
+#  mvc:
+#    servlet:
+#      path: /api/v1
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        format_sql: true
+
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+server:
+  port: 8080
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days

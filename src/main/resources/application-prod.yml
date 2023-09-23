@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/springboot
+    username: postgres
+    password: 123
+    driver-class-name: org.postgresql.Driver
+    dbcp2:
+      test-while-idle: true
+      validation-query: select 1
+  mvc:
+    servlet:
+      path: /api/v1
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+server:
+  port: 8080

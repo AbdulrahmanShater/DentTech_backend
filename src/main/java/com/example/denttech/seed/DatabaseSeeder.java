@@ -23,7 +23,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     @Autowired
     InvoiceItemRepository invoiceItemRepository;
     @Autowired
-    AccountRepository accountRepository;
+    UserRepository userRepository;
     @Autowired
     UserRoleRepository userRoleRepository;
 
@@ -49,31 +49,31 @@ public class DatabaseSeeder implements CommandLineRunner {
         companyRepository.save(vendor);
 
         //account manager for the base company
-        Account manager = new Account(1L, "fname", "lName", "qwe@gmail.com", "12312312", laboratory, null, userRoleManager);
-        accountRepository.save(manager);
+        User manager = new User(1L, "fname", "lName", "qwe@gmail.com", "12312312", laboratory, null, userRoleManager);
+        userRepository.save(manager);
 
         //account for company for sub company
-        Account clinicManager = new Account(2L, "account", "lName", "qwe@gmail.com", "12312312", clinic, null, userRoleCompany);
-        accountRepository.save(clinicManager);
+        User clinicManager = new User(2L, "account", "lName", "qwe@gmail.com", "12312312", clinic, null, userRoleCompany);
+        userRepository.save(clinicManager);
 
         //account for company for sub company
-        Account clinicDoctor = new Account(3L, "Doctor", "lName", "qwe@gmail.com", "12312312", clinic, null, userRoleDoctor);
-        accountRepository.save(clinicDoctor);
+        User clinicDoctor = new User(3L, "Doctor", "lName", "qwe@gmail.com", "12312312", clinic, null, userRoleDoctor);
+        userRepository.save(clinicDoctor);
 
         //account for company for sub company
-        Account vendorManager = new Account(4L, "vendor", "Manger", "qwe@gmail.com", "12312312", vendor, null, userRoleCompany);
-        accountRepository.save(vendorManager);
+        User vendorManager = new User(4L, "vendor", "Manger", "qwe@gmail.com", "12312312", vendor, null, userRoleCompany);
+        userRepository.save(vendorManager);
 
         //Item
         Item item = new Item(1L, "Item1", "Description", 100, 200, 300, 400, null);
         itemRepository.save(item);
 
         //Sell Invoice
-        invoiceRepository.save(new Invoice(1L, "INV-00001", "patient", "12312", "123123", "asdasd", false, true, clinicDoctor,
+        invoiceRepository.save(new Invoice(1L, "INV-00001", "patient", "12312", "123123", "asdasd", false, true,0, clinicDoctor,
                 null, List.of(new InvoiceItem(1L, 1, 200, null, item))));
 
         //buy Invoice
-        invoiceRepository.save(new Invoice(2L, "B_INV-00001", "", "", "", "", false, false, vendorManager,
+        invoiceRepository.save(new Invoice(2L, "B_INV-00001", "", "", "", "", false, false, 0,vendorManager,
                 null, List.of(new InvoiceItem(2L, 4, 200, null, item))));
     }
 }

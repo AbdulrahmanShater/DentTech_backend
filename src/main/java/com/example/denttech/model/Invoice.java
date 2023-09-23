@@ -36,15 +36,15 @@ public class Invoice {
     private boolean paid;
     @Column( length = 60, nullable = false)
     private boolean sell;
+    @Column( length = 60, nullable = false)
+    private double discount;
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @OneToMany
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @JoinColumn(name = "invoice_id")
-    private List<Payment> payments;
+    @OneToMany(mappedBy = "invoice")
+    List<InvoicePayment> invoicePayments;
 
 
     @OneToMany
