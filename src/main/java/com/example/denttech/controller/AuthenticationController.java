@@ -1,8 +1,8 @@
 package com.example.denttech.controller;
 
-import com.example.denttech.dto.AuthenticationRequest;
-import com.example.denttech.dto.AuthenticationResponse;
-import com.example.denttech.dto.RegisterRequest;
+import com.example.denttech.dto.request.AuthenticationRequest;
+import com.example.denttech.dto.response.AuthenticationResponse;
+import com.example.denttech.dto.request.RegisterRequest;
 import com.example.denttech.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

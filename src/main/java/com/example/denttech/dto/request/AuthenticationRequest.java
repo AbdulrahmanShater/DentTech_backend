@@ -1,4 +1,4 @@
-package com.example.denttech.dto;
+package com.example.denttech.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

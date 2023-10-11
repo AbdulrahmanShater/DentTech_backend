@@ -1,4 +1,4 @@
-package com.example.denttech.dto;
+package com.example.denttech.dto.request;
 
 import com.example.denttech.model.UserRole;
 import lombok.AllArgsConstructor;
@@ -17,4 +17,5 @@ public class RegisterRequest {
   private String email;
   private String password;
   private Long role;
+  private Long company;
 }

@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: DentTech
+    ports:
+      - "5422:5432"
+
+
+  app:
+    build: .
+
+    container_name: api
+    restart: always
+    ports:
+      - "8081:8080"
+    depends_on:
+      - 'db'
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/DentTech
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123
+
+volumes:
+  postgres-data:

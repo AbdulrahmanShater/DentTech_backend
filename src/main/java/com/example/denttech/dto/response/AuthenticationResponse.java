@@ -1,4 +1,4 @@
-package com.example.denttech.dto;
+package com.example.denttech.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

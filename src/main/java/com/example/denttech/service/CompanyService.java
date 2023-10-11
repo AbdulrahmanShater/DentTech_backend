@@ -1,13 +1,17 @@
 package com.example.denttech.service;
 
-import com.example.denttech.dto.CompanyDTO;
+import com.example.denttech.dto.request.CompanyRequestDTO;
+import com.example.denttech.dto.response.CompanyResponseDTO;
 
 import java.util.List;
 
 public interface CompanyService {
-    List<CompanyDTO> getCompanies();
+    List<CompanyResponseDTO> getAllCompanies(String username);
 
-    CompanyDTO getCompanyById(Long id);
+    CompanyResponseDTO getCompanyById(Long id);
 
-    CompanyDTO save(CompanyDTO customerDTO);
+    CompanyResponseDTO saveCompany(CompanyRequestDTO customerDTO, String username);
+    CompanyResponseDTO editCompany(CompanyRequestDTO customerDTO, String username,Long id);
+
+    void deleteCompany(Long id, String username);
 }

@@ -2,78 +2,216 @@ package com.example.denttech.seed;
 
 import com.example.denttech.model.*;
 import com.example.denttech.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
 @Profile("dev")
+@RequiredArgsConstructor
 public class DatabaseSeeder implements CommandLineRunner {
 
-    @Autowired
-    CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
 
-    @Autowired
-    ItemRepository itemRepository;
-    @Autowired
-    InvoiceRepository invoiceRepository;
-    @Autowired
-    InvoiceItemRepository invoiceItemRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserRoleRepository userRoleRepository;
+    private final ItemRepository itemRepository;
+    private final InvoiceRepository invoiceRepository;
+    private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
+    private final PaymentModeRepository paymentModeRepository;
+    private final PaymentRepository paymentRepository;
 
 
     @Override
     public void run(String... args) {
         //User Role
-        UserRole userRoleManager = new UserRole(null, "manager", null);
-        UserRole userRoleCompany = new UserRole(null, "company", null);
-        UserRole userRoleDoctor = new UserRole(null, "doctor", null);
+        UserRole userRoleManager = UserRole.builder()
+                                           .name("manager")
+                                           .build();
+        UserRole userRoleCompany = UserRole.builder()
+                                           .name("company")
+                                           .build();
+        UserRole userRoleDoctor = UserRole.builder()
+                                          .name("doctor")
+                                          .build();
         userRoleRepository.saveAll(List.of(userRoleManager, userRoleCompany, userRoleDoctor));
-
+        //Payment Mode
+        PaymentMode cash = PaymentMode.builder()
+                                      .name("cash")
+                                      .build();
+        PaymentMode bank = PaymentMode.builder()
+                                      .name("cash")
+                                      .build();
+        paymentModeRepository.saveAll(List.of(cash, bank));
         //Base Company
-        Company laboratory = new Company(1L, "Laboratory", "+971503131842", "pobox", "info@Denttech.com", "654654894153121864", "Abu Dhabi Alkhalduyah", false, 1L, null, null, null);
+        Company laboratory = Company.builder()
+                                    .name("Laboratory")
+                                    .tel("+971503131842")
+                                    .email("info@Denttech.com")
+                                    .TRN("214587963251453")
+                                    .address("Abu Dhabi Alkhalduyah")
+                                    .vendor(false)
+                                    .price_stage(1)
+                                    .build();
+
         companyRepository.save(laboratory);
 
         // Clinic
-        Company clinic = new Company(2L, "clinic", "+971503131842", "pobox", "info@Denttech.com", "654654894153121864", "Abu Dhabi Alkhalduyah", false, 1L, null, laboratory, null);
+        Company clinic = Company.builder()
+                                .name("clinic")
+                                .tel("+971503131842")
+                                .email("info@Denttech.com")
+                                .TRN("214587963251453")
+                                .address("Abu Dhabi Alkhalduyah")
+                                .vendor(false)
+                                .price_stage(1)
+                                .parent(laboratory)
+                                .build();
         companyRepository.save(clinic);
 
         // Vendor
-        Company vendor = new Company(3L, "vendor", "+971503131842", "pobox", "info@Denttech.com", "654654894153121864", "Abu Dhabi Alkhalduyah", true, 1L, null, laboratory, null);
+        Company vendor = Company.builder()
+                                .name("vendor")
+                                .tel("+971503131842")
+                                .email("info@Denttech.com")
+                                .TRN("214587963251453")
+                                .address("Abu Dhabi Alkhalduyah")
+                                .vendor(true)
+                                .price_stage(1)
+                                .parent(laboratory)
+                                .build();
         companyRepository.save(vendor);
 
         //account manager for the base company
-        User manager = new User(1L, "fname", "lName", "qwe@gmail.com", "12312312", laboratory, null, userRoleManager);
+        User manager = User.builder()
+                           .firstName("fname")
+                           .lastName("la=name")
+                           .email("qwe@gmail.com")
+                           .password("1231231231")
+                           .company(laboratory)
+                           .userRole(userRoleManager)
+                           .tel("+971503131842")
+                           .build();
         userRepository.save(manager);
 
         //account for company for sub company
-        User clinicManager = new User(2L, "account", "lName", "qwe@gmail.com", "12312312", clinic, null, userRoleCompany);
+        User clinicManager =
+
+                User.builder()
+                    .firstName("account")
+                    .lastName("la=name")
+                    .email("qwe@gmail.com")
+                    .password("1231231231")
+                    .company(clinic)
+                    .userRole(userRoleCompany)
+                    .tel("+971503131842")
+                    .build();
         userRepository.save(clinicManager);
 
         //account for company for sub company
-        User clinicDoctor = new User(3L, "Doctor", "lName", "qwe@gmail.com", "12312312", clinic, null, userRoleDoctor);
+        User clinicDoctor =
+                User.builder()
+                    .firstName("Doctor")
+                    .lastName("la=name")
+                    .email("qwe@gmail.com")
+                    .password("1231231231")
+                    .company(clinic)
+                    .userRole(userRoleDoctor)
+                        .tel("+971503131842")
+                    .build();
+
         userRepository.save(clinicDoctor);
 
         //account for company for sub company
-        User vendorManager = new User(4L, "vendor", "Manger", "qwe@gmail.com", "12312312", vendor, null, userRoleCompany);
+        User vendorManager =
+
+                User.builder()
+                    .firstName("vendor")
+                    .lastName("Manger")
+                    .email("qwe@gmail.com")
+                    .password("1231231231")
+                    .company(vendor)
+                    .userRole(userRoleCompany)
+                        .tel("+971503134842")
+                    .build();
+
         userRepository.save(vendorManager);
 
         //Item
-        Item item = new Item(1L, "Item1", "Description", 100, 200, 300, 400, null);
+        Item item = Item.builder()
+                        .name("Item1")
+                        .description("desc")
+                        .price1(100)
+                        .price2(200)
+                        .price3(300)
+                        .price4(400)
+                .company(laboratory)
+                        .build();
+
+
         itemRepository.save(item);
 
         //Sell Invoice
-        invoiceRepository.save(new Invoice(1L, "INV-00001", "patient", "12312", "123123", "asdasd", false, true,0, clinicDoctor,
-                null, List.of(new InvoiceItem(1L, 1, 200, null, item))));
+        Invoice sell = Invoice.builder()
+                              .invoiceNumber("INV-00001")
+                              .patientName("patient")
+                              .fileNumber("123")
+                              .jobOrder("123")
+                              .invoiceDate(LocalDate.now())
+                              .sell(true)
+                              .paid(true)
+                              .user(clinicDoctor)
+                              .invoiceItems(List.of(InvoiceItem.builder().
+                                                               quantity(1)
+                                                               .unitPrice(200)
+                                                               .item(item)
+                                                               .build())
+                              )
+                              .total(200)
+                              .build();
+        invoiceRepository.save(sell);
 
         //buy Invoice
-        invoiceRepository.save(new Invoice(2L, "B_INV-00001", "", "", "", "", false, false, 0,vendorManager,
-                null, List.of(new InvoiceItem(2L, 4, 200, null, item))));
+        Invoice buy = Invoice.builder()
+                             .invoiceNumber("B_INV-00001")
+                             .sell(false)
+                             .paid(true)
+                             .user(vendorManager)
+                             .invoiceDate(LocalDate.now())
+
+                             .invoiceItems(List.of(InvoiceItem.builder().
+                                                              quantity(4)
+                                                              .unitPrice(100)
+                                                              .item(item)
+                                                              .build())
+                             )
+                             .total(400)
+                             .build();
+        invoiceRepository.save(buy);
+
+        //payment
+        Payment payment = Payment.builder()
+                                 .paymentMode(cash)
+                                 .paymentNumber("Pay_123")
+                                 .paymentDate(LocalDate.now())
+                                 .amount(5000)
+                                 .build();
+        InvoicePayment invoicePayment = InvoicePayment.builder()
+                                                      .invoice(sell)
+                                                      .payment(payment)
+                                                      .amount(5000)
+                                                      .build();
+        InvoicePayment invoicePayment1 = InvoicePayment.builder()
+                                                       .invoice(buy)
+                                                       .payment(payment)
+                                                       .amount(2000)
+                                                       .build();
+        payment.setInvoicePayments(List.of(invoicePayment, invoicePayment1));
+        paymentRepository.save(payment);
+
+
     }
 }

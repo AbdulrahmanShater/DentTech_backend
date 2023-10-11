@@ -7,9 +7,6 @@ spring:
     dbcp2:
       test-while-idle: true
       validation-query: select 1
-#  mvc:
-#    servlet:
-#      path: /api/v1
   jpa:
     show-sql: true
     hibernate:
@@ -23,6 +20,9 @@ spring:
 
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  devtools:
+    restart:
+      poll-interval: 2s
 logging:
   level:
     org:

@@ -22,8 +22,9 @@ public class PhoneNumberValidator implements ConstraintValidator<ValidPhoneNumbe
 
             return phoneNumber != null && phoneNumberUtil.isValidNumber(phoneNumber);
 
-        } catch (NumberParseException ex) {
+        } catch (NumberParseException | NullPointerException exception) {
             return false;
         }
+
     }
 }
