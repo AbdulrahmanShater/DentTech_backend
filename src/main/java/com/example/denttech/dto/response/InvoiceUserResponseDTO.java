@@ -7,12 +7,14 @@ import java.util.List;
 
 @Data
 
-public class CompanyUserResponseDTO {
+public class InvoiceUserResponseDTO {
     private Long id;
     private String firstName;
     private String lastName;
     private String email;
     private String tel;
-    private List<InvoiceResponseDTO> Invoices;
+    private UserCompanyResponseDTO company;
+
+//    private List<InvoiceResponseDTO> Invoices;
 
 }

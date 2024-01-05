@@ -1,5 +1,6 @@
 package com.example.denttech.dto.response;
 
+import com.example.denttech.model.Invoice;
 import com.example.denttech.model.InvoicePayment;
 import com.example.denttech.model.PaymentMode;
 import jakarta.persistence.Column;
@@ -21,4 +22,5 @@ public class PaymentResponseDTO {
     private String paymentNumber;
     private String reference;
     private String paymentMode;
+    private List<SellInvoiceResponseDTO> invoices;
 }

@@ -14,4 +14,9 @@ public interface CompanyService {
     CompanyResponseDTO editCompany(CompanyRequestDTO customerDTO, String username,Long id);
 
     void deleteCompany(Long id, String username);
+
+    List<CompanyResponseDTO> getVendors(String username);
+
+    List<CompanyResponseDTO> getBuyers(String username);
+
 }

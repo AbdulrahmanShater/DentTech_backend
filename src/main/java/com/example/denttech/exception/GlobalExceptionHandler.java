@@ -1,6 +1,7 @@
 package com.example.denttech.exception;
 
 import com.example.denttech.dto.ErrorResponse;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +73,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse<String>> handleNoSuchElementException() {
         ErrorResponse<String> errorResponse = new ErrorResponse<>("not found", "ex.getMessage()", "404");
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(errorResponse);
+
+    }
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse<String>> handleExpiredJwtException() {
+        ErrorResponse<String> errorResponse = new ErrorResponse<>("not found", "Token Not valid", "401");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(errorResponse);
 
     }

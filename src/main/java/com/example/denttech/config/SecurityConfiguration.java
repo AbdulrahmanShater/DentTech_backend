@@ -30,8 +30,8 @@ import static org.springframework.http.HttpMethod.*;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-//    private final JwtAuthenticationFilter jwtAuthFilter;
-//    private final AuthenticationProvider authenticationProvider;
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
 
     @Bean
@@ -39,7 +39,7 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/**", "/api/v1/auth/**")
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/**")
                                                .permitAll()
 //                                               .requestMatchers("/api/v1/management/**")
 //                                               .hasAnyRole("ADMIN.name()", " MANAGER.name()")
@@ -52,12 +52,12 @@ public class SecurityConfiguration {
 //                                               .requestMatchers(DELETE, "/api/v1/management/**")
 //                                               .hasAnyAuthority("ADMIN_DELETE.name()", "MANAGER_DELETE.name()")
 //
-//                                               .anyRequest()
-//                                               .authenticated()
+                                               .anyRequest()
+                                               .authenticated()
             )
-//            .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//            .authenticationProvider(authenticationProvider)
-//            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authenticationProvider(authenticationProvider)
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
 
                     .logoutUrl("/api/v1/auth/logout")

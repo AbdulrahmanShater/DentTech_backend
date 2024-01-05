@@ -30,11 +30,12 @@ public class User implements UserDetails {
     private String firstName;
     @Column(length = 60, nullable = false)
     private String lastName;
-    @Column(length = 60, nullable = false)
+
+    @Column(length = 60, nullable = false,unique = true)
     private String email;
     @Column(length = 60, nullable = false)
     private String password;
-    @Column(length = 15)
+    @Column(length = 15,unique = true)
     private String tel;
     @ToString.Exclude
     @ManyToOne

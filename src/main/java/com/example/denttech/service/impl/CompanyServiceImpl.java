@@ -3,6 +3,7 @@ package com.example.denttech.service.impl;
 import com.example.denttech.dto.request.CompanyRequestDTO;
 import com.example.denttech.dto.response.CompanyResponseDTO;
 import com.example.denttech.dto.response.PaymentResponseDTO;
+import com.example.denttech.dto.response.UserResponseDTO;
 import com.example.denttech.exception.EntityNotFoundException;
 import com.example.denttech.model.Company;
 import com.example.denttech.model.Invoice;
@@ -17,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -41,46 +43,53 @@ public class CompanyServiceImpl implements CompanyService {
         Set<PaymentResponseDTO> payments = new HashSet<>();
         for (Company company : companyRepository.findAll()) {
             if (company.getParent() == u.getCompany()) {
+
                 CompanyResponseDTO companyResponseDTO = modelMapper.map(company, CompanyResponseDTO.class);
-                double debit = 0, credit = 0;
+                double debit = companyRepository.findDebitByCompanyId(company.getId())
+                                                .orElse(0D);
+                double credit = companyRepository.findCreditByCompanyId(company.getId())
+                                                 .orElse(0D);
                 if (!company.isVendor()) {
-                    for (User user : company.getUsers()) {
-                        for (Invoice invoice : user.getInvoices()) {
-                            debit += invoice.getTotal();
-                            for (InvoicePayment invoicePayment : invoice.getInvoicePayments()) {
-                                if (invoicePayment.getPayment() != null) {
-                                    PaymentResponseDTO paymentResponseDTO = modelMapper.map(invoicePayment.getPayment(), PaymentResponseDTO.class);
-                                    payments.add(paymentResponseDTO);
-                                }
-                            }
-                        }
-                    }
+
+
+//                    for (User user : company.getUsers()) {
+//                        for (Invoice invoice : user.getInvoices()) {
+//                            debit += invoice.getTotal();
+//                            for (InvoicePayment invoicePayment : invoice.getInvoicePayments()) {
+//                                if (invoicePayment.getPayment() != null) {
+//                                    PaymentResponseDTO paymentResponseDTO = modelMapper.map(invoicePayment.getPayment(), PaymentResponseDTO.class);
+//                                    payments.add(paymentResponseDTO);
+//                                }
+//                            }
+//                        }
+//                    }
                 } else {
-                    for (User user : company.getUsers()) {
-                        for (Invoice invoice : user.getInvoices()) {
-
-                            debit += invoice.getTotal();
-                            for (InvoicePayment invoicePayment : invoice.getInvoicePayments()) {
-                                if (invoicePayment.getPayment() != null) {
-                                    PaymentResponseDTO paymentResponseDTO = modelMapper.map(invoicePayment.getPayment(), PaymentResponseDTO.class);
-                                    payments.add(paymentResponseDTO);
-                                }
-                            }
-
-                        }
-                    }
+//                    for (User user : company.getUsers()) {
+//                        for (Invoice invoice : user.getInvoices()) {
+//
+//                            debit += invoice.getTotal();
+//                            for (InvoicePayment invoicePayment : invoice.getInvoicePayments()) {
+//                                if (invoicePayment.getPayment() != null) {
+//                                    PaymentResponseDTO paymentResponseDTO = modelMapper.map(invoicePayment.getPayment(), PaymentResponseDTO.class);
+//                                    payments.add(paymentResponseDTO);
+//                                }
+//                            }
+//
+//                        }
+//                    }
                 }
                 companyResponseDTO.setDebit(debit);
-                for (PaymentResponseDTO paymentResponseDTO : payments)
-                    credit += paymentResponseDTO.getAmount();
-                companyResponseDTO.setPayments(List.of(modelMapper.map(paymentRepository.findById(1L)
-                                                                                        .orElseThrow(), PaymentResponseDTO.class)));
+
+//                companyResponseDTO.setPayments(List.of(modelMapper.map(paymentRepository.findById(1L)
+//                                                                                        .orElseThrow(), PaymentResponseDTO.class)));
                 companyResponseDTO.setCredit(credit);
                 companyResponseDTO.setBalance(debit - credit);
-                if (debit - credit == 0) {
-                    companyResponseDTO.setStatus("paid");
+                if (credit - debit == 0) {
+                    companyResponseDTO.setStatus("Paid");
+                } else if (credit - debit > 0) {
+                    companyResponseDTO.setStatus("Owed");
                 } else {
-                    companyResponseDTO.setStatus("unpaid");
+                    companyResponseDTO.setStatus("Unpaid");
                 }
                 companies.add(companyResponseDTO);
             }
@@ -142,5 +151,123 @@ public class CompanyServiceImpl implements CompanyService {
         } else {
             throw new EntityNotFoundException("this company doesnt belong to you ");
         }
+    }
+
+    @Override
+    public List<CompanyResponseDTO> getVendors(String username) {
+        User u = userRepository.findByEmail(username)
+                               .orElseThrow();
+
+        List<CompanyResponseDTO> companies = new ArrayList<>();
+        Set<PaymentResponseDTO> payments = new HashSet<>();
+        for (Company company : companyRepository.findByVendor(true)) {
+            if (company.getParent() == u.getCompany()) {
+
+                CompanyResponseDTO companyResponseDTO = modelMapper.map(company, CompanyResponseDTO.class);
+
+                double debit = 0, credit = 0;
+                if (!company.isVendor()) {
+                    for (User user : company.getUsers()) {
+                        for (Invoice invoice : user.getInvoices()) {
+                            debit += invoice.getTotal();
+                            for (InvoicePayment invoicePayment : invoice.getInvoicePayments()) {
+                                if (invoicePayment.getPayment() != null) {
+                                    PaymentResponseDTO paymentResponseDTO = modelMapper.map(invoicePayment.getPayment(), PaymentResponseDTO.class);
+                                    payments.add(paymentResponseDTO);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for (User user : company.getUsers()) {
+                        for (Invoice invoice : user.getInvoices()) {
+
+                            debit += invoice.getTotal();
+                            for (InvoicePayment invoicePayment : invoice.getInvoicePayments()) {
+                                if (invoicePayment.getPayment() != null) {
+                                    PaymentResponseDTO paymentResponseDTO = modelMapper.map(invoicePayment.getPayment(), PaymentResponseDTO.class);
+                                    payments.add(paymentResponseDTO);
+                                }
+                            }
+
+                        }
+                    }
+                }
+                companyResponseDTO.setDebit(debit);
+                for (PaymentResponseDTO paymentResponseDTO : payments)
+                    credit += paymentResponseDTO.getAmount();
+//                companyResponseDTO.setPayments(List.of(modelMapper.map(paymentRepository.findById(1L)
+//                                                                                        .orElseThrow(), PaymentResponseDTO.class)));
+                companyResponseDTO.setCredit(credit);
+                companyResponseDTO.setBalance(debit - credit);
+                if (debit - credit == 0) {
+                    companyResponseDTO.setStatus("paid");
+                } else {
+                    companyResponseDTO.setStatus("unpaid");
+                }
+                companies.add(companyResponseDTO);
+            }
+        }
+
+        return companies;
+    }
+
+    @Override
+    public List<CompanyResponseDTO> getBuyers(String username) {
+        User u = userRepository.findByEmail(username)
+                               .orElseThrow();
+
+        List<CompanyResponseDTO> companies = new ArrayList<>();
+        Set<PaymentResponseDTO> payments = new HashSet<>();
+        for (Company company : companyRepository.findByVendor(false)) {
+            if (company.getParent() == u.getCompany()) {
+
+                CompanyResponseDTO companyResponseDTO = modelMapper.map(company, CompanyResponseDTO.class);
+
+                double debit = 0, credit = 0;
+                if (!company.isVendor()) {
+                    for (User user : company.getUsers()) {
+                        for (Invoice invoice : user.getInvoices()) {
+                            debit += invoice.getTotal();
+                            for (InvoicePayment invoicePayment : invoice.getInvoicePayments()) {
+                                if (invoicePayment.getPayment() != null) {
+                                    PaymentResponseDTO paymentResponseDTO = modelMapper.map(invoicePayment.getPayment(), PaymentResponseDTO.class);
+                                    payments.add(paymentResponseDTO);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for (User user : company.getUsers()) {
+                        for (Invoice invoice : user.getInvoices()) {
+
+                            debit += invoice.getTotal();
+                            for (InvoicePayment invoicePayment : invoice.getInvoicePayments()) {
+                                if (invoicePayment.getPayment() != null) {
+                                    PaymentResponseDTO paymentResponseDTO = modelMapper.map(invoicePayment.getPayment(), PaymentResponseDTO.class);
+                                    payments.add(paymentResponseDTO);
+                                }
+                            }
+
+                        }
+                    }
+                }
+                companyResponseDTO.setDebit(debit);
+                for (PaymentResponseDTO paymentResponseDTO : payments)
+                    credit += paymentResponseDTO.getAmount();
+//                companyResponseDTO.setPayments(List.of(modelMapper.map(paymentRepository.findById(1L)
+//                                                                                        .orElseThrow(), PaymentResponseDTO.class)));
+                companyResponseDTO.setCredit(credit);
+                companyResponseDTO.setBalance(debit - credit);
+                if (debit - credit == 0) {
+                    companyResponseDTO.setStatus("paid");
+                } else {
+                    companyResponseDTO.setStatus("unpaid");
+                }
+                companies.add(companyResponseDTO);
+            }
+        }
+
+        return companies;
     }
 }

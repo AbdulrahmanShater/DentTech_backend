@@ -27,12 +27,17 @@ public class UserServiceImpl implements UserService {
     public List<UserResponseDTO> getUsers(String username) {
         return userRepository.findAll()
                              .stream()
+                             .filter(user ->
+                                     user.getUserRole()
+                                         .getId() != 1
+                             )
                              .map(user -> {
                                          //TODO PARENT WILL BE SAME OF COMPANY ID FROM THE USER
 //                                    if (company.getParent() != null) {
 //                                        return
 //                                    }
 //                                    return null;
+
                                          return modelMapper.map(user, UserResponseDTO.class);
                                      }
                              )
@@ -41,10 +46,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO getUserById(Long id, String username) {
-
         return modelMapper.map(userRepository.findById(id)
                                              .orElseThrow(() -> new EntityNotFoundException("Customer not found")), UserResponseDTO.class);
-
     }
 
     @Override
@@ -52,6 +55,7 @@ public class UserServiceImpl implements UserService {
         User u = userRepository.findByEmail(username)
                                .orElseThrow();
         User c = modelMapper.map(userRequestDTO, User.class);
+
         Company com = companyRepository.findById(userRequestDTO.getCompany())
                                        .orElseThrow();
         c.setCompany(com);
@@ -67,13 +71,38 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO editUser(UserRequestDTO userRequestDTO, String username, Long id) {
         User c1 = modelMapper.map(userRequestDTO, User.class);
         User c = userRepository.findById(id)
-                                     .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+                               .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
 
-            c.setEmail(c1.getEmail());
-            c.setFirstName(c1.getFirstName());
-            c.setLastName(c1.getLastName());
-            c.setTel(c1.getTel());
-            return modelMapper.map(userRepository.save(c), UserResponseDTO.class);
+        c.setEmail(c1.getEmail());
+        c.setFirstName(c1.getFirstName());
+        c.setLastName(c1.getLastName());
+        c.setTel(c1.getTel());
+        return modelMapper.map(userRepository.save(c), UserResponseDTO.class);
 
+    }
+
+    @Override
+    public List<UserResponseDTO> getBuyers(String username) {
+        User u = userRepository.findByEmail(username)
+                               .orElseThrow();
+        return userRepository.findByVendor(3, false, u.getCompany()
+                                                      .getId())
+                             .stream()
+                             .map(user -> modelMapper.map(user, UserResponseDTO.class)
+                             )
+                             .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserResponseDTO> getVendors(String username) {
+        User u = userRepository.findByEmail(username)
+                               .orElseThrow();
+
+        return userRepository.findByVendor(2, true, u.getCompany()
+                                                     .getId())
+                             .stream()
+                             .map(user -> modelMapper.map(user, UserResponseDTO.class)
+                             )
+                             .collect(Collectors.toList());
     }
 }

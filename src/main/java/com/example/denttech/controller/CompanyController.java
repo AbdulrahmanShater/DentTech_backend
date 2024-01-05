@@ -34,6 +34,18 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(new DataResponse<>("success", "Companies retrieved successfully.", companyService.getAllCompanies(username)));
     }
+//    @PutMapping("/vendors")
+//    public ResponseEntity<DataResponse<List<CompanyResponseDTO>>> getVendors(@RequestHeader("Authorization") String jwtToken) {
+//        String username = jwtService.extractUsername(jwtToken.substring(7));
+//        return ResponseEntity.status(HttpStatus.OK)
+//                             .body(new DataResponse<>("success", "Companies retrieved successfully.", companyService.getVendors(username)));
+//    }
+//    @PutMapping("/buyers")
+//    public ResponseEntity<DataResponse<List<CompanyResponseDTO>>> getBuyers(@RequestHeader("Authorization") String jwtToken) {
+//        String username = jwtService.extractUsername(jwtToken.substring(7));
+//        return ResponseEntity.status(HttpStatus.OK)
+//                             .body(new DataResponse<>("success", "Companies retrieved successfully.", companyService.getBuyers(username)));
+//    }
 
     @PostMapping("/{id}")
     public ResponseEntity<DataResponse<CompanyResponseDTO>> getCompany(@PathVariable Long id) {
@@ -56,7 +68,6 @@ public class CompanyController {
         companyService.deleteCompany(id, username);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .body(null);
-
     }
 
 

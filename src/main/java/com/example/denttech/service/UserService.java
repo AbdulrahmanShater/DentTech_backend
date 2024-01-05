@@ -15,4 +15,8 @@ public interface UserService {
     void deleteUser(Long id, String username);
 
     UserResponseDTO editUser(UserRequestDTO userRequestDTO, String username, Long id);
+
+    List<UserResponseDTO> getBuyers(String username);
+
+    List<UserResponseDTO> getVendors(String username);
 }

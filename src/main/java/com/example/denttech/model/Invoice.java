@@ -43,6 +43,8 @@ public class Invoice {
     private double total;
     @Column(nullable = false, updatable = false)
     private LocalDate invoiceDate;
+    @Column(length = 60)
+    private String reference;
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "user_id")

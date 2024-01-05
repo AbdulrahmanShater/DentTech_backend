@@ -3,7 +3,9 @@ package com.example.denttech.controller;
 import com.example.denttech.config.JwtService;
 import com.example.denttech.dto.DataResponse;
 import com.example.denttech.dto.request.UserRequestDTO;
+import com.example.denttech.dto.response.CompanyResponseDTO;
 import com.example.denttech.dto.response.UserResponseDTO;
+import com.example.denttech.model.User;
 import com.example.denttech.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<DataResponse<List<UserResponseDTO>>> getCompanies(@RequestHeader("Authorization") String jwtToken) {
+    public ResponseEntity<DataResponse<List<UserResponseDTO>>> getUsers(@RequestHeader("Authorization") String jwtToken) {
         String username = jwtService.extractUsername(jwtToken.substring(7));
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -60,5 +62,16 @@ public class UserController {
                              .body(null);
 
     }
-
+    @PutMapping("/buyers")
+    public ResponseEntity<DataResponse<List<UserResponseDTO>>> getBuyers(@RequestHeader("Authorization") String jwtToken) {
+        String username = jwtService.extractUsername(jwtToken.substring(7));
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(new DataResponse<>("success", "Companies retrieved successfully.", userService.getBuyers(username)));
+    }
+    @PutMapping("/vendors")
+    public ResponseEntity<DataResponse<List<UserResponseDTO>>> getVendors(@RequestHeader("Authorization") String jwtToken) {
+        String username = jwtService.extractUsername(jwtToken.substring(7));
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(new DataResponse<>("success", "Companies retrieved successfully.", userService.getVendors(username)));
+    }
 }

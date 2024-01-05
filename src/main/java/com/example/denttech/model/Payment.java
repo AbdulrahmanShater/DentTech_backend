@@ -36,7 +36,7 @@ public class Payment {
     List<InvoicePayment> invoicePayments;
     @ManyToOne
     @JoinColumn(name = "payment_mode_id")
-    private PaymentMode paymentMode;
+        private PaymentMode paymentMode;
     //    @CreatedDate
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

@@ -23,5 +23,7 @@ public class UserRequestDTO {
     private String password;
     @NotNull(message = "company is required")
     private Long company;
+    //    @NotNull(message = "userRole is required")
+    //    private Long userRole;
 
 }
